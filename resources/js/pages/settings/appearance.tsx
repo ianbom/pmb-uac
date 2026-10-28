@@ -1,5 +1,5 @@
 import { Head } from '@inertiajs/react';
-import { SettingsAppearance } from '@/admin/features/settings/appearance';
+import { SettingsAppearance } from '@/features/settings/appearance';
 
 export default function Appearance() {
     return (

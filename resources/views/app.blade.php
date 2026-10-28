@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" @class(['dark' => ($appearance ?? 'system') == 'dark']) @if (! request()->routeIs('home')) data-admin-theme="true" @endif>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" @class(['dark' => ($appearance ?? 'system') == 'dark'])>
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -26,7 +26,7 @@
             }
 
             html.dark {
-                background-color: oklch(0.145 0 0);
+                background-color: oklch(0.129 0.042 264.695);
             }
         </style>
 

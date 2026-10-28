@@ -14,6 +14,13 @@ export type Auth = {
     user: User;
 };
 
+export type SharedData = {
+    name: string;
+    auth: Auth;
+    sidebarOpen: boolean;
+    [key: string]: unknown;
+};
+
 export type Passkey = {
     id: number;
     name: string;

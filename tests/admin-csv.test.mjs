@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { toCsv } from '../resources/js/admin/lib/csv.ts';
+import { toCsv } from '../resources/js/lib/csv.ts';
 
 assert.equal(toCsv([]), '');
 assert.equal(

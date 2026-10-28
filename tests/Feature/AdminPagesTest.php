@@ -11,34 +11,56 @@ class AdminPagesTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_template_pages_require_authentication(): void
+    private const PAGES = [
+        'tasks' => 'admin.tasks',
+        'users' => 'admin.users',
+        'apps' => 'admin.apps',
+        'chats' => 'admin.chats',
+        'help-center' => 'admin.help-center',
+        'settings/account' => 'admin.settings.account',
+        'settings/notifications' => 'admin.settings.notifications',
+        'settings/display' => 'admin.settings.display',
+    ];
+
+    public function test_admin_pages_require_authentication(): void
     {
-        foreach (['tasks', 'users', 'apps', 'chats', 'help-center', 'settings/account', 'settings/notifications', 'settings/display', 'demo/auth/sign-in-2', 'demo/auth/otp', 'demo/errors/404'] as $path) {
+        foreach (self::PAGES as $path => $name) {
+            $this->assertSame(url($path), route($name));
             $this->get('/'.$path)->assertRedirect(route('login'));
         }
     }
 
-    public function test_authenticated_users_can_open_template_pages(): void
+    public function test_authenticated_users_can_open_dedicated_pages(): void
     {
-        $this->actingAs(User::factory()->create());
+        $user = User::factory()->create();
+        $this->actingAs($user);
 
-        foreach (['tasks', 'users', 'apps', 'chats', 'help-center', 'settings/account', 'settings/notifications', 'settings/display'] as $path) {
-            $this->get('/'.$path)->assertOk()->assertInertia(fn (Assert $page) => $page->component('admin/template')->where('templatePage', $path));
-        }
-
-        foreach (['sign-in', 'sign-in-2', 'sign-up', 'forgot-password', 'otp'] as $variant) {
-            $this->get('/demo/auth/'.$variant)->assertOk()->assertInertia(fn (Assert $page) => $page->component('admin/auth-preview')->where('variant', $variant));
-        }
-
-        foreach (['401', '403', '404', '500', '503'] as $code) {
-            $this->get('/demo/errors/'.$code)->assertOk()->assertInertia(fn (Assert $page) => $page->component('admin/error-preview')->where('code', $code));
+        foreach (self::PAGES as $path => $name) {
+            $this->get(route($name))->assertOk()->assertInertia(fn (Assert $page) => $page
+                ->component($path)
+                ->missing('templatePage')
+                ->where('auth.user.name', $user->name)
+                ->where('auth.user.email', $user->email));
         }
     }
 
-    public function test_unknown_previews_are_not_registered(): void
+    public function test_preview_routes_are_not_registered(): void
     {
+        $paths = [
+            'demo/auth/sign-in', 'demo/auth/sign-in-2', 'demo/auth/sign-up',
+            'demo/auth/forgot-password', 'demo/auth/otp',
+            'demo/errors/401', 'demo/errors/403', 'demo/errors/404',
+            'demo/errors/500', 'demo/errors/503',
+        ];
+
+        foreach ($paths as $path) {
+            $this->get('/'.$path)->assertNotFound();
+        }
+
         $this->actingAs(User::factory()->create());
-        $this->get('/demo/auth/unknown')->assertNotFound();
-        $this->get('/demo/errors/999')->assertNotFound();
+
+        foreach ($paths as $path) {
+            $this->get('/'.$path)->assertNotFound();
+        }
     }
 }
