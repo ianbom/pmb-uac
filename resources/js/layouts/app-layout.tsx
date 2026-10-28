@@ -1,16 +1,14 @@
-import AppLayoutTemplate from '@/layouts/app/app-sidebar-layout';
+import type { PropsWithChildren } from 'react';
+import { AdminProvider } from '@/admin/components/admin-provider';
+import { AuthenticatedLayout } from '@/admin/components/layout/authenticated-layout';
 import type { BreadcrumbItem } from '@/types';
 
 export default function AppLayout({
-    breadcrumbs = [],
     children,
-}: {
-    breadcrumbs?: BreadcrumbItem[];
-    children: React.ReactNode;
-}) {
+}: PropsWithChildren<{ breadcrumbs?: BreadcrumbItem[] }>) {
     return (
-        <AppLayoutTemplate breadcrumbs={breadcrumbs}>
-            {children}
-        </AppLayoutTemplate>
+        <AdminProvider>
+            <AuthenticatedLayout>{children}</AuthenticatedLayout>
+        </AdminProvider>
     );
 }
