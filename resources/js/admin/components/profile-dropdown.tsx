@@ -24,6 +24,7 @@ export function ProfileDropdown() {
                     <Button
                         variant="ghost"
                         className="relative h-8 w-8 rounded-full"
+                        aria-label="Open user menu"
                     >
                         <Avatar className="h-8 w-8">
                             <AvatarFallback>SN</AvatarFallback>

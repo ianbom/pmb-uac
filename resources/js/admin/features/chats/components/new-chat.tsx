@@ -14,6 +14,7 @@ import {
     Dialog,
     DialogContent,
     DialogHeader,
+    DialogDescription,
     DialogTitle,
 } from '@/admin/components/ui/dialog';
 import { type ChatUser } from '../data/chat-types';
@@ -54,6 +55,9 @@ export function NewChat({ users, onOpenChange, open, onSelect }: NewChatProps) {
             <DialogContent className="sm:max-w-150">
                 <DialogHeader>
                     <DialogTitle>New message</DialogTitle>
+                    <DialogDescription>
+                        Select one contact to open a local demo conversation.
+                    </DialogDescription>
                 </DialogHeader>
                 <div className="flex flex-col gap-4">
                     <div className="flex flex-wrap items-baseline-last gap-2">
