@@ -111,7 +111,7 @@ export function Chats() {
                             >
                                 <SearchIcon
                                     size={15}
-                                    className="me-2 stroke-slate-500"
+                                    className="me-2 text-muted-foreground"
                                 />
                                 <span className="sr-only">Search</span>
                                 <input

@@ -4,7 +4,7 @@ import { Users } from '@/features/users';
 export default function UsersPage() {
     return (
         <>
-            <Head title="Users" />
+            <Head title="Data Pendaftar" />
             <Users />
         </>
     );

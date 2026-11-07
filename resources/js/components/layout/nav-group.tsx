@@ -44,6 +44,27 @@ export function NavGroup({ title, items }: NavGroupProps) {
                 {items.map((item) => {
                     const key = `${item.title}-${item.url}`;
 
+                    if (item.disabled)
+                        return (
+                            <SidebarMenuItem key={key}>
+                                <SidebarMenuButton
+                                    disabled
+                                    aria-label={`${item.title} — Belum tersedia. ${item.description ?? ''}`}
+                                    title={`${item.description ?? item.title} — Belum tersedia`}
+                                    tooltip={`${item.title} — Belum tersedia`}
+                                    className="h-auto min-h-8 disabled:opacity-70"
+                                >
+                                    {item.icon && <item.icon />}
+                                    <span className="whitespace-normal group-data-[collapsible=icon]:hidden">
+                                        {item.title}
+                                    </span>
+                                    <span className="sr-only">
+                                        Belum tersedia
+                                    </span>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                        );
+
                     if (!item.items)
                         return (
                             <SidebarMenuLink
@@ -114,7 +135,10 @@ function SidebarMenuCollapsible({
         >
             <SidebarMenuItem>
                 <CollapsibleTrigger asChild>
-                    <SidebarMenuButton tooltip={item.title}>
+                    <SidebarMenuButton
+                        tooltip={item.title}
+                        isActive={checkIsActive(href, item, true)}
+                    >
                         {item.icon && <item.icon />}
                         <span>{item.title}</span>
                         {item.badge && <NavBadge>{item.badge}</NavBadge>}
@@ -203,12 +227,11 @@ function SidebarMenuCollapsedDropdown({
 }
 
 function checkIsActive(href: string, item: NavItem, mainNav = false) {
+    if (item.disabled) return false;
+    const path = href.split(/[?#]/)[0];
     return (
-        href === item.url || // /endpint?search=param
-        href.split('?')[0] === item.url || // endpoint
-        !!item?.items?.filter((i) => i.url === href).length || // if child nav is active
-        (mainNav &&
-            href.split('/dashboard')[1] !== '' &&
-            href.split('/dashboard')[1] === item?.url?.split('/dashboard')[1])
+        path === item.url ||
+        !!item.items?.some((child) => path === child.url) ||
+        (mainNav && !!item.url && path.startsWith(`${item.url}/`))
     );
 }

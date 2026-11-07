@@ -12,7 +12,7 @@ import {
 import { sidebarData } from './data/sidebar-data';
 import { NavGroup } from './nav-group';
 import { NavUser } from './nav-user';
-import { TeamSwitcher } from './team-switcher';
+import { GraduationCap } from 'lucide-react';
 
 export function AppSidebar() {
     const { auth } = usePage<SharedData>().props;
@@ -20,11 +20,17 @@ export function AppSidebar() {
     return (
         <Sidebar collapsible={collapsible} variant={variant}>
             <SidebarHeader>
-                <TeamSwitcher teams={sidebarData.teams} />
-
-                {/* Replace <TeamSwitch /> with the following <AppTitle />
-         /* if you want to use the normal app title instead of TeamSwitch dropdown */}
-                {/* <AppTitle /> */}
+                <div className="flex h-12 items-center gap-2 overflow-hidden px-2">
+                    <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-highlight text-highlight-foreground">
+                        <GraduationCap className="size-5" />
+                    </div>
+                    <div className="min-w-0 group-data-[collapsible=icon]:hidden">
+                        <p className="truncate font-semibold">PMB UAC</p>
+                        <p className="truncate text-xs">
+                            Administrasi Penerimaan
+                        </p>
+                    </div>
+                </div>
             </SidebarHeader>
             <SidebarContent>
                 {sidebarData.navGroups.map((props) => (
